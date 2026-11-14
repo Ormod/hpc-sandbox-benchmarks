@@ -146,6 +146,11 @@ jobs:
           BREZEL_ENVIRONMENT_REVISION: ${{ contains(fromJSON(inputs.providers), 'brezel') && (env.BREZEL_ENVIRONMENT_REVISION || vars.BREZEL_ENVIRONMENT_REVISION || secrets.BREZEL_ENVIRONMENT_REVISION) || '' }}
           DIGITAL_OCEAN_TOKEN: ${{ contains(fromJSON(inputs.providers), 'digitalocean') && secrets.DIGITAL_OCEAN_TOKEN || '' }}
           BASETEN_API_KEY: ${{ contains(fromJSON(inputs.providers), 'baseten') && secrets.BASETEN_API_KEY || '' }}
+          AVR_TOKEN: ${{ contains(fromJSON(inputs.providers), 'avrea') && secrets.AVR_TOKEN || '' }}
+          AVR_ORG: ${{ contains(fromJSON(inputs.providers), 'avrea') && (env.AVR_ORG || vars.AVR_ORG || secrets.AVR_ORG) || '' }}
+          AVREA_SSH_KEY: ${{ contains(fromJSON(inputs.providers), 'avrea') && secrets.AVREA_SSH_KEY || '' }}
+          AVR_HOST: ${{ contains(fromJSON(inputs.providers), 'avrea') && (env.AVR_HOST || vars.AVR_HOST || secrets.AVR_HOST) || '' }}
+          AVREA_SNAPSHOT_VM: ${{ contains(fromJSON(inputs.providers), 'avrea') && (env.AVREA_SNAPSHOT_VM || vars.AVREA_SNAPSHOT_VM || secrets.AVREA_SNAPSHOT_VM) || '' }}
           # <<< end generated: provider-inputs-bench
           # >>> generated: provider-runner-lifetime — bun run generate-provider-wiring
           BENCH_RUNNER_LIFETIME_MINUTES: ${{ '' }}

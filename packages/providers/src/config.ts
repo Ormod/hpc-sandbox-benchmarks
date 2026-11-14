@@ -23,6 +23,8 @@ import { type } from "arktype";
 const envSchema = type({
 	"FREESTYLE_SNAPSHOT_ID?": "string >= 1",
 	"FREESTYLE_BASE_SNAPSHOT_ID?": "string >= 1",
+	"AVREA_SNAPSHOT_VM?": "string >= 1",
+	"AVR_HOST?": "string >= 1",
 	"BENCH_TOOLCHAIN_IMAGE?": "string >= 1",
 	"E2B_TEMPLATE?": "string >= 1",
 	"DAYTONA_API_KEY?": "string >= 1",
@@ -59,6 +61,8 @@ const envSchema = type({
 export const ENV_KEYS = [
 	"FREESTYLE_SNAPSHOT_ID",
 	"FREESTYLE_BASE_SNAPSHOT_ID",
+	"AVREA_SNAPSHOT_VM",
+	"AVR_HOST",
 	"BENCH_TOOLCHAIN_IMAGE",
 	"E2B_TEMPLATE",
 	"DAYTONA_API_KEY",

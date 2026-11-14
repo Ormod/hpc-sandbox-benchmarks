@@ -23,6 +23,7 @@ export const PROVIDER_IDS = [
 	"brezel",
 	"digitalocean",
 	"baseten",
+	"avrea",
 ] as const;
 
 export type ProviderId = (typeof PROVIDER_IDS)[number];

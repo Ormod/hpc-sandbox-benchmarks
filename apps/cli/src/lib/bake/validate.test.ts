@@ -5,6 +5,7 @@ import { baseImageUse, candidateCreateOptions, candidateResolvedArtifact } from 
 
 const refs: CandidateRefs = {
 	freestyleSnapshotCandidate: "sh-freestyle-candidate",
+	avreaSnapshotCandidate: "cvm-0000000000000000000000000000abcd",
 	e2bTemplateCandidate: "tc-v1-candidate",
 	daytonaSnapshotCandidate: "snap-v1-candidate",
 	daytonaContainerSnapshotCandidate: "snap-v1-container-candidate",

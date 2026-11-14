@@ -10,6 +10,7 @@
     "./modal": "./src/modal.ts",
     "./pins": "./src/pins.ts",
     "./freestyle": "./src/freestyle.ts",
+    "./avrea": "./src/avrea.ts",
     "./manifest": "./src/manifest.ts",
     "./smoke": "./src/smoke.ts"
   },

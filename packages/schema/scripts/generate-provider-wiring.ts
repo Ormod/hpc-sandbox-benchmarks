@@ -519,6 +519,8 @@ export function renderDriversProvenance(root = REPO_ROOT): Map<string, string> {
 		// No client library covers MicroVMs yet; the adapter targets the documented v2 REST API.
 		["DIGITALOCEAN", REGISTRY.digitalocean.sdkPackage, "v2"],
 		["BASETEN", REGISTRY.baseten.sdkPackage, catalogVersion(catalog, REGISTRY.baseten.sdkPackage)],
+		// No client library: the adapter targets the customer VM REST API and OpenSSH.
+		["AVREA", REGISTRY.avrea.sdkPackage, "v1"],
 	] as const;
 	const packages = new Set(
 		driverFleetProjection(root).moduleIds.map((id) => driverModuleLocation(id).directory),

@@ -57,6 +57,7 @@
     "novita-sandbox": "catalog:computesdk",
     "dotenv": "catalog:",
     "@sandbox-benchmarks/modal": "workspace:*",
+    "@sandbox-benchmarks/avrea": "workspace:*",
     "@sandbox-benchmarks/freestyle": "workspace:*",
     "arktype": "catalog:"
   },

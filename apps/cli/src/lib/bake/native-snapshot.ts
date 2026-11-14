@@ -6,7 +6,7 @@
 // source tree's recipe, then the same smoke.
 
 import { createHash } from "node:crypto";
-import type { SandboxSession } from "@sandbox-benchmarks/driver";
+import type { DriverModule, ProviderId, SandboxSession } from "@sandbox-benchmarks/driver";
 import { shellQuote, writeTextFile } from "@sandbox-benchmarks/driver";
 import type { SnapshotPreparation } from "@sandbox-benchmarks/driver/artifact";
 import { verifyDriverReadiness } from "@sandbox-benchmarks/driver/conformance";
@@ -14,6 +14,7 @@ import { loadDriverModule } from "@sandbox-benchmarks/drivers";
 import { SessionStepRunner } from "@sandbox-benchmarks/harness";
 import type { ArtifactPhase, NativeSnapshotProviderId, Suite } from "@sandbox-benchmarks/schema";
 import { REGISTRY, SUITES, TARGET_SPEC } from "@sandbox-benchmarks/schema";
+import { avreaSetupScript } from "@sandbox-benchmarks/templates/avrea";
 import { freestyleSetupScript } from "@sandbox-benchmarks/templates/freestyle";
 import { runSmoke } from "@sandbox-benchmarks/templates/smoke";
 import { type } from "arktype";
@@ -21,6 +22,7 @@ import { type } from "arktype";
 /** The install recipe each native-snapshot provider's candidate runs in its booted base. */
 const NATIVE_SNAPSHOT_RECIPES = {
 	freestyle: freestyleSetupScript,
+	avrea: avreaSetupScript,
 } as const satisfies Record<NativeSnapshotProviderId, () => string>;
 
 const provenanceRecord = type({ recipeSha256: "string" });
@@ -65,7 +67,8 @@ export function nativeSnapshotPreparation(
 			...(session.files && { files: session.files }),
 			...(launch && { launch: (command, options) => launch(command, { ...options, signal }) }),
 		};
-		const module = await loadDriverModule(id);
+		// The join is correlated per id; a runtime id meets the union of native-snapshot modules.
+		const module = (await loadDriverModule(id)) as DriverModule<ProviderId>;
 		const readiness = await verifyDriverReadiness(module, session as never, { signal });
 		if (readiness.status !== "pass")
 			throw new Error(`Driver readiness verification failed: ${readiness.detail}`);

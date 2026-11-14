@@ -16,8 +16,28 @@ export function freestyleStockToolsCleanup(binDir = "/usr/local/bin"): string {
 done`;
 }
 
+/** How a native Ubuntu snapshot differs between providers. */
+export interface NativeUbuntuSetupOptions {
+	/** The unprivileged user benchmark commands run as; PTS definitions are seeded for it. */
+	readonly runtimeUser: string;
+	/** Shell run after the pinned PTS definitions are staged and before they are installed. */
+	readonly beforePtsInstall?: string;
+}
+
 /** Install the shared toolchain directly in Ubuntu; workloads still run in the outer VM. */
 export function freestyleSetupScript(): string {
+	return nativeUbuntuSetupScript({ runtimeUser: "ubuntu" });
+}
+
+/** The native install shared by every Ubuntu snapshot provider. */
+export function nativeUbuntuSetupScript({
+	runtimeUser,
+	beforePtsInstall,
+}: NativeUbuntuSetupOptions): string {
+	// Interpolated unquoted so Freestyle's recipe, and the digest its provenance records, is unchanged.
+	if (!/^[a-z_][a-z0-9_-]*$/.test(runtimeUser))
+		throw new Error(`Invalid runtime user ${runtimeUser}`);
+	const user = runtimeUser;
 	const pins = validatedPins();
 	const script = (name: string) =>
 		readFileSync(new URL(`../images/base/scripts/${name}`, import.meta.url), "utf8");
@@ -80,6 +100,7 @@ done`,
 				(profile) =>
 					`tar -xzf "$build_dir/profiles.tar.gz" -C /var/lib/phoronix-test-suite/test-profiles/pts --strip-components=2 test-profiles-${PTS_PROFILE_SOURCE_REF}/pts/${profile}`,
 			),
+		...(beforePtsInstall === undefined ? [] : [beforePtsInstall]),
 		"export PTS_DIRECT_INSTALL=1",
 		...pins.ptsInstallGroups.map(
 			(group) => `export PTS_PROFILE_GROUP=${quote(group)}\n${run("25-pts-profiles.sh")}`,
@@ -87,15 +108,15 @@ done`,
 		// PTS shares installed payloads through its supported install-root override, but profile
 		// definitions live in each user's own mutable state. Seed ubuntu with the pinned definitions
 		// too, so a runtime list/run never needs OpenBenchmarking to rediscover a baked profile.
-		'user_home="$(getent passwd ubuntu | cut -d: -f6)"; test -d "$user_home"',
-		'install -d -o ubuntu -g ubuntu "$user_home/.phoronix-test-suite/test-profiles/pts"',
+		`user_home="$(getent passwd ${user} | cut -d: -f6)"; test -d "$user_home"`,
+		`install -d -o ${user} -g ${user} "$user_home/.phoronix-test-suite/test-profiles/pts"`,
 		...pins.ptsInstallTests
 			.split(" ")
 			.map(
 				(profile) =>
 					`cp -a /var/lib/phoronix-test-suite/test-profiles/pts/${profile} "$user_home/.phoronix-test-suite/test-profiles/pts/"`,
 			),
-		'chown -R ubuntu:ubuntu "$user_home/.phoronix-test-suite"',
+		`chown -R ${user}:${user} "$user_home/.phoronix-test-suite"`,
 		run("99-manifest.sh"),
 		"if command -v typescript-language-server; then echo 'Unexpected global language server on benchmark PATH' >&2; exit 1; fi",
 		"rm -rf /var/lib/apt/lists/*",

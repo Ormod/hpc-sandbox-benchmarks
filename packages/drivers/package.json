@@ -13,6 +13,7 @@
     "test": "bun test"
   },
   "dependencies": {
+    "@sandbox-benchmarks/avrea": "workspace:*",
     "@sandbox-benchmarks/baseten": "workspace:*",
     "@sandbox-benchmarks/blaxel": "workspace:*",
     "@sandbox-benchmarks/boat": "workspace:*",

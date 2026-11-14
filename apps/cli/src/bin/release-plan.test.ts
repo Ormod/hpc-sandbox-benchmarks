@@ -82,6 +82,7 @@ describe("buildReleasePlan matrix", () => {
 			"brezel",
 			"digitalocean",
 			"baseten",
+			"avrea",
 		]);
 	});
 

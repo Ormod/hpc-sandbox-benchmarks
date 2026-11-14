@@ -8,6 +8,8 @@ export { baseImageUse } from "@sandbox-benchmarks/schema/provider-artifacts";
 
 export interface CandidateRefs {
 	freestyleSnapshotCandidate?: string;
+	/** Candidate paused artifact VM (cvm-...) the Avrea bake captured. */
+	avreaSnapshotCandidate?: string;
 	e2bTemplateCandidate: string;
 	/** Candidate LINUX_VM snapshot for daytona-vm. */
 	daytonaSnapshotCandidate: string;
@@ -89,6 +91,13 @@ function candidateLaunch(id: ProviderId, refs: CandidateRefs): CandidateLaunch {
 			return {
 				artifact: { kind: "baked", ref: refs.freestyleSnapshotCandidate },
 				createOptions: { snapshotId: refs.freestyleSnapshotCandidate },
+			};
+		case "avrea":
+			if (!refs.avreaSnapshotCandidate)
+				throw new Error("Avrea candidate artifact VM was not resolved");
+			return {
+				artifact: { kind: "baked", ref: refs.avreaSnapshotCandidate },
+				createOptions: { snapshotId: refs.avreaSnapshotCandidate },
 			};
 		case "novita":
 			// Same mapping as e2b (snapshotId → template name), against Novita's control plane.

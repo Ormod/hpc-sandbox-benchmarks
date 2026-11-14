@@ -33,6 +33,7 @@ const REQUIRED_INPUTS = {
 	brezel: ["BREZEL_API_KEY", "BREZEL_API_URL", "BREZEL_PROJECT_ID", "BREZEL_ENVIRONMENT_REVISION"],
 	digitalocean: ["DIGITAL_OCEAN_TOKEN"],
 	baseten: ["BASETEN_API_KEY"],
+	avrea: ["AVR_TOKEN", "AVR_ORG", "AVREA_SSH_KEY"],
 } as const satisfies Record<ProviderId, readonly string[]>;
 
 const ARTIFACT_KINDS = {
@@ -53,6 +54,7 @@ const ARTIFACT_KINDS = {
 	brezel: "none",
 	digitalocean: "image",
 	baseten: "baked",
+	avrea: "baked",
 } as const satisfies Record<ProviderId, (typeof REGISTRY)[ProviderId]["artifact"]["kind"]>;
 
 const BAKED = {
@@ -63,6 +65,7 @@ const BAKED = {
 	freestyle: true,
 	novita: true,
 	baseten: true,
+	avrea: true,
 } as const satisfies Record<BakedProviderId, true>;
 
 function localRuntimeDependency(importer: string, specifier: string): string | undefined {
@@ -143,6 +146,7 @@ describe("provider metadata authoring", () => {
 			"freestyle",
 			"novita",
 			"baseten",
+			"avrea",
 		]);
 		const acceptBaked = (id: BakedProviderId) => id;
 		const acceptStock = (id: StockProviderId) => id;

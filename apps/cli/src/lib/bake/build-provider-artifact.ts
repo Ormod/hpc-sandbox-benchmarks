@@ -87,7 +87,10 @@ export async function buildProviderArtifact(
 		if (isNativeSnapshotProviderId(id)) {
 			if (phase === "version" && inputs.candidate === undefined)
 				throw new Error(`${id} version build needs the revalidated candidate's immutable ref`);
-			const builder = await loadArtifactBuilder(id);
+			// The join is correlated per id; a runtime id meets the union of native-snapshot builders.
+			const builder = (await loadArtifactBuilder(id)) as {
+				build(request: object): Promise<ArtifactBuildResult>;
+			};
 			return builder.build({
 				...common,
 				bakes: "native-snapshot",

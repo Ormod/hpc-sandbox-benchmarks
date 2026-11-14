@@ -293,6 +293,7 @@ const ARTIFACT_REF_OVERRIDE_ENV = {
 	"daytona-vm": "DAYTONA_SNAPSHOT",
 	"daytona-container": "DAYTONA_CONTAINER_SNAPSHOT",
 	freestyle: "FREESTYLE_SNAPSHOT_ID",
+	avrea: "AVREA_SNAPSHOT_VM",
 } as const satisfies Partial<Record<DriverProviderId, string>>;
 
 /**

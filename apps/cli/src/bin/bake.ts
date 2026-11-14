@@ -218,6 +218,11 @@ if (import.meta.main) {
 					pinnedBaseImage,
 					(m) => log(`    ${m}`),
 				);
+				if (target.id === "avrea") {
+					if (typeof builtRef !== "string")
+						throw new Error("Avrea bake did not return its artifact VM id");
+					candidateRefs.avreaSnapshotCandidate = builtRef;
+				}
 				if (target.id === "freestyle") {
 					if (typeof builtRef !== "string")
 						throw new Error("Freestyle bake did not return its immutable snapshot ID");
@@ -260,6 +265,7 @@ if (import.meta.main) {
 	writeReport({
 		candidate: {
 			freestyleSnapshotId: candidateRefs.freestyleSnapshotCandidate,
+			avreaSnapshotVm: candidateRefs.avreaSnapshotCandidate,
 			image: pinnedBaseImage,
 			e2bTemplate: config.e2bTemplateCandidate,
 			daytonaSnapshot: config.daytonaSnapshotCandidate,

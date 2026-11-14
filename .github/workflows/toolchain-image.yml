@@ -537,6 +537,11 @@ jobs:
           BREZEL_ENVIRONMENT_REVISION: ${{ matrix.provider == 'brezel' && (env.BREZEL_ENVIRONMENT_REVISION || vars.BREZEL_ENVIRONMENT_REVISION || secrets.BREZEL_ENVIRONMENT_REVISION) || '' }}
           DIGITAL_OCEAN_TOKEN: ${{ matrix.provider == 'digitalocean' && secrets.DIGITAL_OCEAN_TOKEN || '' }}
           BASETEN_API_KEY: ${{ matrix.provider == 'baseten' && secrets.BASETEN_API_KEY || '' }}
+          AVR_TOKEN: ${{ matrix.provider == 'avrea' && secrets.AVR_TOKEN || '' }}
+          AVR_ORG: ${{ matrix.provider == 'avrea' && (env.AVR_ORG || vars.AVR_ORG || secrets.AVR_ORG) || '' }}
+          AVREA_SSH_KEY: ${{ matrix.provider == 'avrea' && secrets.AVREA_SSH_KEY || '' }}
+          AVR_HOST: ${{ matrix.provider == 'avrea' && (env.AVR_HOST || vars.AVR_HOST || secrets.AVR_HOST) || '' }}
+          AVREA_SNAPSHOT_VM: ${{ matrix.provider == 'avrea' && (env.AVREA_SNAPSHOT_VM || vars.AVREA_SNAPSHOT_VM || secrets.AVREA_SNAPSHOT_VM) || '' }}
           # <<< end generated: provider-inputs-bake
           VERCEL_CANDIDATE_IMAGE: ${{ steps.vercel-vcr.outcome == 'success' && steps.vercel-vcr.outputs.digest-ref || '' }}
         run: |
@@ -736,6 +741,11 @@ jobs:
           BREZEL_ENVIRONMENT_REVISION: ${{ contains(fromJSON(needs.plan.outputs.matrix).include.*.provider, 'brezel') && (env.BREZEL_ENVIRONMENT_REVISION || vars.BREZEL_ENVIRONMENT_REVISION || secrets.BREZEL_ENVIRONMENT_REVISION) || '' }}
           DIGITAL_OCEAN_TOKEN: ${{ contains(fromJSON(needs.plan.outputs.matrix).include.*.provider, 'digitalocean') && secrets.DIGITAL_OCEAN_TOKEN || '' }}
           BASETEN_API_KEY: ${{ contains(fromJSON(needs.plan.outputs.matrix).include.*.provider, 'baseten') && secrets.BASETEN_API_KEY || '' }}
+          AVR_TOKEN: ${{ contains(fromJSON(needs.plan.outputs.matrix).include.*.provider, 'avrea') && secrets.AVR_TOKEN || '' }}
+          AVR_ORG: ${{ contains(fromJSON(needs.plan.outputs.matrix).include.*.provider, 'avrea') && (env.AVR_ORG || vars.AVR_ORG || secrets.AVR_ORG) || '' }}
+          AVREA_SSH_KEY: ${{ contains(fromJSON(needs.plan.outputs.matrix).include.*.provider, 'avrea') && secrets.AVREA_SSH_KEY || '' }}
+          AVR_HOST: ${{ contains(fromJSON(needs.plan.outputs.matrix).include.*.provider, 'avrea') && (env.AVR_HOST || vars.AVR_HOST || secrets.AVR_HOST) || '' }}
+          AVREA_SNAPSHOT_VM: ${{ contains(fromJSON(needs.plan.outputs.matrix).include.*.provider, 'avrea') && (env.AVREA_SNAPSHOT_VM || vars.AVREA_SNAPSHOT_VM || secrets.AVREA_SNAPSHOT_VM) || '' }}
           # <<< end generated: provider-inputs-promote
           VERCEL_CANDIDATE_IMAGE: ${{ steps.vercel-vcr.outcome == 'success' && steps.vercel-vcr.outputs.digest-ref || '' }}
         run: |
