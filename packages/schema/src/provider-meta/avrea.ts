@@ -36,10 +36,10 @@ export default defineProviderMeta("avrea", {
 	],
 	runtimeIdentity: "unprivileged",
 	isolation: {
-		class: "vm",
-		technology: "KVM virtual machine",
+		class: "microVM",
+		technology: "Cloud Hypervisor microVM (KVM)",
 		notes:
-			"Full Linux VMs (Ubuntu 26.04, Avrea kernel) forked from a paused native snapshot holding the shared pinned toolchain, run as the passwordless-sudo runner user with a clean system PATH. This is an Ubuntu VM, while OCI-based providers use Debian 13; GCC 15's C23 default needs pgbench's PostgreSQL built with -std=gnu17.",
+			"Full Linux microVMs (Ubuntu 26.04, Avrea kernel) forked from a paused native snapshot holding the shared pinned toolchain, run as the passwordless-sudo runner user with a clean system PATH. This is an Ubuntu VM, while OCI-based providers use Debian 13; GCC 15's C23 default needs pgbench's PostgreSQL built with -std=gnu17.",
 	},
 	pricing: {
 		model: "unavailable",

@@ -78,6 +78,8 @@ const vm = type({
 export type AvreaVm = typeof vm.infer;
 type SshEndpoint = typeof sshEndpoint.infer;
 const one = type({ data: vm }).onUndeclaredKey("ignore");
+/** A stock create also answers the VM's one-time password beside it; it is never read. */
+const created = type({ data: type({ vm }).onUndeclaredKey("ignore") }).onUndeclaredKey("ignore");
 const many = type({
 	data: vm.array(),
 	"pagination?": type({ "next_cursor?": "string | null" }).onUndeclaredKey("ignore").or("null"),
@@ -369,10 +371,11 @@ export function avreaVendor(
 								ttl_seconds,
 							}
 						: { display_name, ttl_seconds };
-				const path =
-					resolvedArtifact.ref === AVREA_STOCK_BASE ? "" : `/${resolvedArtifact.ref}/fork`;
-				const created = one.assert(await request("POST", path, signal, body)).data;
-				return { ...record(created), phase: "pending" };
+				const row =
+					resolvedArtifact.ref === AVREA_STOCK_BASE
+						? created.assert(await request("POST", "", signal, body)).data.vm
+						: one.assert(await request("POST", `/${resolvedArtifact.ref}/fork`, signal, body)).data;
+				return { ...record(row), phase: "pending" };
 			},
 			get: async (id, { signal }) => record(await read(id, signal)),
 			// 202 is an acknowledgement; the kit reads on until DELETED or a 404.

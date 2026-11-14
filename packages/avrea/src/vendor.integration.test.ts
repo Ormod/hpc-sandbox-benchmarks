@@ -58,20 +58,14 @@ function avreaServer() {
 					size: string;
 					ssh_public_keys: string[];
 				};
-				return Response.json(
-					{
-						data: vm(
-							add({
-								display_name,
-								state: "PENDING",
-								forkable: false,
-								size,
-								keys: ssh_public_keys,
-							}),
-						),
-					},
-					{ status: 202 },
-				);
+				const row = add({
+					display_name,
+					state: "PENDING",
+					forkable: false,
+					size,
+					keys: ssh_public_keys,
+				});
+				return Response.json({ data: { vm: vm(row), password: "unused" } }, { status: 202 });
 			},
 			[`POST ${base}/:id/fork`]: ({ row, body, add }) => {
 				if (row.state !== "PAUSED" || !row.forkable)
@@ -243,7 +237,7 @@ test("a snapshot pauses the build VM and keeps a paused fork of it as the artifa
 	expect(artifact?.state).toBe("PAUSED");
 	expect(artifact?.display_name.startsWith("sandbox-benchmarks-artifact-")).toBe(true);
 	// The builder then destroys the build VM; the artifact must not depend on it.
-	await vendor.control.remove(created.id, op);
+	await vendor.control.remove(created.id, { ...op, current: async () => record });
 	expect(server.rows.get(snapshotId)?.state).toBe("PAUSED");
 	await snapshots.delete(snapshotId, op);
 	expect(server.rows.get(snapshotId)?.state).toBe("DELETING");
